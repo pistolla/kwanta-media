@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Available Scripts
 
 ## KWANTA - (SWAHILI name for quanta) A MEDIA TOKEN WITH FIXED START VALUE THAT APPRECIATES WITH FACTS, DEPRECIATES WITH FICTIONS, THE MINIMUM BALANCE REWARDS THE STORY TELLER AND FACT/FICTION FEED 
-###TLR; DR
+### TLR; DR
 Objective: Develop a dapp that registers and watch media url using tokens using cookie to manage, track and analyse media data trail. References, likes, in positives, while old(no update)
 
 ### WORK PLAN
