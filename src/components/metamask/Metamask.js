@@ -24,7 +24,7 @@ const MetaMaskInstallDialog = (props) => (
         <DialogTitle>{"Oops, you haven't install MetaMask"}</DialogTitle>
         <DialogContent>
             <DialogContentText>
-                {"You’ll need a safe place to store all of your adorable THIS PROJECT! The perfect place is in a secure wallet like MetaMask. This will also act as your login to the game (no extra password needed)."}
+                {"You’ll need a safe place to seed your Media Links account! The perfect place is in a secure wallet like MetaMask. This will also act as your login to Kwanta (no extra password needed)."}
             </DialogContentText>
         </DialogContent>
         <DialogActions>
