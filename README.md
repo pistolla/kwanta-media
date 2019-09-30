@@ -7,9 +7,9 @@ Objective: Develop a dapp that maintains a list of media urls using ERC tokens t
 ### WORK PLAN
 1. Create a Reactjs app to register media urls that are accessible publicly via URL
 2. Connect user to Ethereum network using Metamask
-3. Create an account where Ethereum can seed any amount to one or many tokens or withdraw tokens in future but with a minimal network charges
+3. Create an account where Ethereum user can seed any amount to one/many MediaUrls or withdraw ERC tokens in future but with a minimal network charges
 4. Store media urls and link them to Wallet
-5. Create a nodejs daemon that checks and verifies media content sources using a [private] cloud service that checks document credibility
+5. Create a nodejs daemon that checks and verifies media content sources using a [private owned] cloud service that checks document credibility
 6. Reward tokens to mediaUrls that have credible sources
 7. Deduct tokens to MediaURls that have unverifiable sources
 
