@@ -2,7 +2,11 @@ import checkPropTypes from 'check-prop-types';
 import { applyMiddleware, createStore } from 'redux';
 import { middlewares } from '../createStore';
 import rootReducer from '../reducers';
-import { element } from 'prop-types';
+
+export const findByElement = (component, element) => {
+    const wrapper = component.find(`${element}`);
+    return wrapper;
+}
 
 export const findByTestAttr = (component, attr) => {
     const wrapper = component.find(`[data-test='${attr}']`);
@@ -10,9 +14,7 @@ export const findByTestAttr = (component, attr) => {
 }
 
 export const findByElementTestAttr = (component, element, attr) => {
-    console.log(component.debug())
-    const wrapper = component.find(`[a data-test='${attr}']`);
-    console.log(wrapper.debug())
+    const wrapper = component.find(`${element}`);
     return wrapper;
 }
 

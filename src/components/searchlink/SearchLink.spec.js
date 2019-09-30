@@ -1,16 +1,20 @@
 import SearchLink from './SearchLink';
 import React from 'react';
-import { shallow } from 'enzyme';
-import { findByTestAttr } from '../../utils';
+import { shallow, mount } from 'enzyme';
+import { findByTestAttr, findByElementTestAttr } from '../../utils';
 
 const setup = (props = {}) => {
     const component = shallow(<SearchLink {...props} />);
 
     return component;
 }
+const renderer = (props = {}) => {
+    const component = mount(<SearchLink {...props} />);
+    return component;
+}
 
 describe('SearchLink Component', () => {
-    describe('Have props', () => {
+    describe('Renders', () => {
         let wrapper;
         beforeEach(() => {
             wrapper = setup();
@@ -20,10 +24,18 @@ describe('SearchLink Component', () => {
             expect(component.length).toBe(1);
         });
     })
-    describe('Renders', () => {
-
+    describe('Searches', () => {
+        let wrapper;
+        beforeEach(() => {
+            wrapper = renderer();
+        });
+        it('Should set loading active when button clicked', () => {
+            const component = findByElementTestAttr(wrapper, 'button', 'button');
+            component.simulate('click');
+            expect(wrapper.props('loading')).toEqual(true);
+        });
     })
-    describe('Check Proptypes', () => {
+    // describe('Check Proptypes', () => {
         
-    })
+    // })
 });
