@@ -1,5 +1,5 @@
 ## KWANTA - (SWAHILI name for quanta) 
-### A MEDIA TOKEN WITH FIXED START VALUE THAT APPRECIATES WITH FACTS, DEPRECIATES WITH FICTIONS, THE MINIMUM BALANCE REWARDS THE STORY TELLER AND FACT/FICTION FEED 
+### A MEDIA TOKEN WITH FIXED START VALUE THAT APPRECIATES WITH FACTS, DEPRECIATES WITH FAKE NEWS, THE MINIMUM BALANCE REWARDS OR DEDUCT THE AUTHOR
 
 ### TLR; DR
 Objective: Develop a dapp that maintains a list of media urls using ERC tokens to manage, track and verify sources, References, likes, and comments on Ethereum testnet network. The dap continuously verifies credibility of sources and rewards author if its credible or deducts author for any Disinformation. 
