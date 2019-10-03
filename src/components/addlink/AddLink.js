@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, DialogContent, TextField } from '@material
 import { makeStyles } from '@material-ui/styles';
 import AddIcon from '@material-ui/icons/Add';
 
-const useState = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     addButton: {
         margin: theme.spacing.unit
     }
@@ -12,6 +12,7 @@ const useState = makeStyles(theme => ({
 function AddLink(){
     const classes = useStyles();
     const { open } = useState(false);
+    const { url } = useState('');
  
     handleClose = () => {
         this.setState({open: false});   
@@ -19,7 +20,13 @@ function AddLink(){
 
     handleSubmit = () => {
         
-    } 
+    }
+
+    handleUrlChange = (name) => event => {
+        this.setState({
+            name: event.target.value
+        })
+    }
 
     return (
         <Fragment data-test="AddLinkComponent">
@@ -33,15 +40,56 @@ function AddLink(){
                 <DialogTitle id="create-link-form">Paste a link</DialogTitle>
                 <DialogContent>
                     <form>
-
-                    </form>
                     <TextField
                         autoFocus
                         id="input-link"
-                        label="Add a link to media resource"
+                        label="Add Domain"
                         type="text"
                         fullWidth
+                        onChange={this.handleUrlChange}
                     />
+                    <TextField
+                        autoFocus
+                        id="input-link"
+                        label="Add a URL to media resource"
+                        type="text"
+                        fullWidth
+                        onChange={this.handleUrlChange}
+                    />
+                    <TextField
+                        autoFocus
+                        id="input-link"
+                        label="Select the type of media resource"
+                        type="text"
+                        fullWidth
+                        onChange={this.handleUrlChange}
+                    />
+                    <TextField
+                        autoFocus
+                        id="input-link"
+                        label="Are you the author or do you have write access to this media content?"
+                        type="text"
+                        fullWidth
+                        onChange={this.handleUrlChange}
+                    />
+                    <TextField
+                        autoFocus
+                        id="input-link"
+                        label="Add the seed token for this url"
+                        type="text"
+                        fullWidth
+                        onChange={this.handleUrlChange}
+                    />
+                    <TextField
+                        autoFocus
+                        id="input-link"
+                        label="Agree to term and conditions"
+                        type="text"
+                        fullWidth
+                        onChange={this.handleUrlChange}
+                    />
+                    </form>
+                    
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.handleSubmit} color="primary">Create</Button>

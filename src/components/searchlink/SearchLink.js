@@ -1,5 +1,5 @@
-import React from 'react';
-import { CircularProgress, InputBase, Button, Fade } from '@material-ui/core';
+import React, { useState } from 'react';
+import { CircularProgress, TextField, IconButton, Fade, Divider, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -9,74 +9,87 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         paddingTop: '60px',
-        paddingBottom: '0px'
-    },
-    button: {
-        margin: theme.spacing(2),
-    },
-    placeholder: {
-        height: 60,
-        display: 'inline-flex',
+        paddingBottom: '0px',
         width: '100%'
     },
-    inputRoot: {
-        color: 'inherit',
+    input: {
+        marginLeft: theme.spacing(1),
+        flex: 1
     },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 7),
-        transition: theme.transitions.create('width'),
-        width: '100%',
+    iconButton: {
+        padding: 10
     },
-    searchIcon: {
-        width: theme.spacing(7),
+    divider: {
         height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
+        margin: 4
+    },
+    progressBar: {
+        width: 60,
+        height: 60
+    },
+    searchContainer: {
         display: 'flex',
+        flexDirection: 'row',
+        width: '80%',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-around'
+    },
+    refresh: {
+        marginLeft: 4
     }
 }));
 
-function SearchLink(props) {
+function SearchLink({ fetchMediaUrls, searching, onSearching }) {
     const classes = useStyles();
-    const [loading, setLoading] = React.useState(false);
 
-    const handleClickQuery = () => {
-        setLoading(true);
+    const handleSearchQuery = () => {
+        onSearching(true);
+        console.log(searching);
+        fetchMediaUrls(async () => {
 
-        // props.handleMediasearch(async () => {
+        });
+    };
 
-        // });
-        return loading;
+    const handleRefreshQuery = () => {
+        onSearching(true);
+
+        fetchMediaUrls(async () => {
+
+        });
     };
 
     return (
-        <div className="root" data-test="SearchLinkComponent">
-            <div className={classes.placeholder}>
-                <div className={classes.searchIcon}>
-                    <SearchIcon />
-                </div>
-                <InputBase
-                    placeholder="Search…"
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
+        <div align="center" className="root" data-test="SearchLinkComponent">
+            <div className={classes.searchContainer}>
+                <TextField
+                    placeholder="Type or paste a a url for facts check..."
+                    className={classes.input}
+                    type="search"
+                    margin="normal"
+                    variant="outlined"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton data-test="search" onClick={handleSearchQuery} className={classes.iconButton} {...(searching ? 'disabled' : '')}>
+                                    <SearchIcon fontSize="large" />
+                                </IconButton>
+                            </InputAdornment>
+                        )
                     }}
-                    inputProps={{ 'aria-label': 'search' }}
                 />
-                <Button data-test="button" onClick={handleClickQuery} className={classes.button} {...(loading? 'disabled':'')}>
-                    Search
-                </Button>
+                <div align="center" className="refresh">
+                    <Fade
+                        in={searching}
+                        style={{
+                            transitionDelay: searching ? '800ms' : '0ms',
+                        }}
+                        unmountOnExit
+                    >
+                        <CircularProgress className={classes.progressBar} />
+                    </Fade>
+                </div>
             </div>
-            <Fade
-                in={loading}
-                style={{
-                    transitionDelay: loading ? '800ms' : '0ms',
-                }}
-                unmountOnExit>
-                <CircularProgress />
-            </Fade>
+
         </div>
     );
 }

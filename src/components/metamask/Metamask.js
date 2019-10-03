@@ -28,10 +28,10 @@ const MetaMaskInstallDialog = (props) => (
             </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button raised href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?utm_source=chrome-ntp-icon" color="primary">
+            <Button href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?utm_source=chrome-ntp-icon" color="primary">
                 Install MetaMask
       </Button>
-            <Button raised onClick={props.handleMetaMaskInstallDialogClose} color="primary">
+            <Button onClick={props.handleMetaMaskInstallDialogClose} color="primary">
                 I understand, continue
       </Button>
         </DialogActions>
@@ -50,7 +50,7 @@ const MetaMaskLockDialog = (props) => (
             </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button raised onClick={props.handleMetaMaskLockDialogClose} color="primary">
+            <Button onClick={props.handleMetaMaskLockDialogClose} color="primary">
                 I understand, continue
       </Button>
         </DialogActions>
