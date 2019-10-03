@@ -1,5 +1,10 @@
 import React from 'react';
 
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex'
+    }
+}))
 
 function FilterMediaLinks(props){
     const classes = useStyles();
