@@ -1,13 +1,16 @@
-import React, { useState, Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Container, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Container, Typography, Tabs, Tab } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { MetaMask } from './components/metamask/Metamask';
 import Account from './components/account/Account';
 import Media from './components/media/Media';
 import Main from './components/main/Main';
+import About from './components/about/About';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withRouter } from 'react-router';
 import { fetchMediaUrls } from './actions';
 
 class App extends Component {
@@ -23,19 +26,29 @@ class App extends Component {
       flexGrow: 1,
     },
     sectionDesktop: {
-      display: 'none',
-      [theme.breakpoints.up('md')]: {
+      display: 'inline',
+      alignItems: 'center',
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
         display: 'flex',
+        flexDirection: 'column'
       },
     },
+    navTab: {
+      paddingBottom: 0
+    }
   }));
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.fetch = this.fetch.bind(this);
+    this.state = { value: 2 }
+    // this.props.history.listen((location, action) => {
+
+    // })
   }
 
-  fetch(){
+  fetch() {
     this.props.fetchMediaUrls();
   }
 
@@ -46,8 +59,11 @@ class App extends Component {
   setWeb3 = (web3) => {
   }
 
+  handleChange = (tab, value) => {
+    this.setState({ value: value });
+  }
+
   render() {
-    const { mediaUrls } = this.props;
     return (
       <Router>
         <div className={this.classes.root} data-test="AppComponent">
@@ -58,25 +74,36 @@ class App extends Component {
               </IconButton>
               <Typography variant="h6" className={this.classes.title}>
                 KWANTA
-          </Typography>
-              <div className={this.classes.sectionDesktop}>
-                <Link to="/" data-test="mainlink">Home</Link>
-                <Link to="/medialinks" data-test="medialink">Media</Link>
-                <Link to="/account"  data-test="accountlink">Account</Link>
-              </div>
+              </Typography>
+              <Tabs
+                edge="center"
+                className={this.classes.sectionDesktop}
+                value={this.state.value}
+                onChange={this.handleChange}
+                textColor="inherit"
+                centered
+              >
+                <Tab label="Search" component={Link} to="/" className={this.classes.navTab} />
+                <Tab label="Watch List" component={Link} to="/watchlinks" className={this.classes.navTab} />
+                <Tab label="Wallet" component={Link} to="/wallet" className={this.classes.navTab} />
+                <Tab label="Get Started" component={Link} to="/getstarted" className={this.classes.navTab} />
+              </Tabs>
               <MetaMask {...this.props} {...this.state} setWeb3={this.setWeb3} />
             </Toolbar>
           </AppBar>
-          <Container maxWidth="sm">
+          <Container maxWidth="lg">
             <Switch>
               <Route path="/">
-                <Main />
+                <Main {...this.props} />
               </Route>
-              <Route path="/medialinks">
-                <Media />
+              <Route path="/watchlinks">
+                <Media {...this.props} />
               </Route>
-              <Route path="/account">
-                <Account />
+              <Route path="/wallet">
+                <Account {...this.props} />
+              </Route>
+              <Route path="/getstarted">
+                <About {...this.props} />
               </Route>
             </Switch>
           </Container>
@@ -87,7 +114,14 @@ class App extends Component {
 }
 const mapStateToProps = state => {
   return {
-    mediaUrls: state.mediaurls
+    mediaUrls: [{ id: 1, url: 'path/url/to/document/0', title: 'DOMAIN NAME 0' },
+    { id: 2, url: 'path/url/to/document/1', title: 'DOMAIN NAME 1' },
+    { id: 3, url: 'path/url/to/document/2', title: 'DOMAIN NAME 2' },
+    { id: 4, url: 'path/url/to/document/3', title: 'DOMAIN NAME 3' },
+    { id: 5, url: 'path/url/to/document/4', title: 'DOMAIN NAME 4' }]//state.mediaurls
   }
 }
-export default connect(mapStateToProps, {fetchMediaUrls})(App);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, { fetchMediaUrls })
+)(App);
