@@ -34,4 +34,5 @@ To test the functionality we require to  media urls that loads a blog content, w
 ### REFERENCES
 1. [ContentInsight - Decoding the news: understanding the authenticity of what you read online](https://contentinsight.com/authenticity-of-what-you-read-online/)
 2. [Brainpickings - Walter Benjamin on Information vs. Wisdom and Storytelling as the Antidote to Death by News](https://www.brainpickings.org/2015/03/09/walter-benjamin-illuminations-the-storyteller/)
+3. [FACTCHECK.ORG] (https://factcheck.org/fake-news/)
 
