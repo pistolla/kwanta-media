@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Container, Typography, Tabs, Tab } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import DeveloperModeIcon from '@material-ui/icons/DeveloperMode';
 import { MetaMask } from './components/metamask/Metamask';
 import Account from './components/account/Account';
 import Media from './components/media/Media';
 import Main from './components/main/Main';
 import About from './components/about/About';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { withRouter } from 'react-router';
 import { fetchMediaUrls } from './actions';
 
@@ -36,16 +36,19 @@ class App extends Component {
     },
     navTab: {
       paddingBottom: 0
+    },
+    appbar: {
+      zIndex: theme.zIndex.drawer + 1
     }
   }));
 
   constructor(props) {
     super(props);
     this.fetch = this.fetch.bind(this);
-    this.state = { value: 2 }
-    // this.props.history.listen((location, action) => {
-
-    // })
+    this.state = { value: 0, connected: false }
+    this.props.history.listen((location, action) => {
+      
+    })
   }
 
   fetch() {
@@ -57,6 +60,9 @@ class App extends Component {
   }
 
   setWeb3 = (web3) => {
+    if(web3 !== undefined){
+      this.setState({connected: true});
+    }
   }
 
   handleChange = (tab, value) => {
@@ -65,18 +71,18 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
         <div className={this.classes.root} data-test="AppComponent">
-          <AppBar position="static">
+          <AppBar position="absolute" className={this.classes.appbar}>
             <Toolbar>
               <IconButton edge="start" className={this.classes.menuButton} color="inherit" aria-label="menu">
-                <MenuIcon />
+                <DeveloperModeIcon />
               </IconButton>
               <Typography variant="h6" className={this.classes.title}>
                 KWANTA
               </Typography>
               <Tabs
                 edge="center"
+                variant="fullWidth"
                 className={this.classes.sectionDesktop}
                 value={this.state.value}
                 onChange={this.handleChange}
@@ -93,14 +99,14 @@ class App extends Component {
           </AppBar>
           <Container maxWidth="lg">
             <Switch>
-              <Route path="/">
+              <Route exact path="/">
                 <Main {...this.props} />
               </Route>
               <Route path="/watchlinks">
-                <Media {...this.props} />
+                <Media {...this.props} connected={this.state.connected} />
               </Route>
               <Route path="/wallet">
-                <Account {...this.props} />
+                <Account {...this.props} connected={this.state.connected} />
               </Route>
               <Route path="/getstarted">
                 <About {...this.props} />
@@ -108,20 +114,13 @@ class App extends Component {
             </Switch>
           </Container>
         </div>
-      </Router>
     )
   };
 }
 const mapStateToProps = state => {
   return {
-    mediaUrls: [{ id: 1, url: 'path/url/to/document/0', title: 'DOMAIN NAME 0' },
-    { id: 2, url: 'path/url/to/document/1', title: 'DOMAIN NAME 1' },
-    { id: 3, url: 'path/url/to/document/2', title: 'DOMAIN NAME 2' },
-    { id: 4, url: 'path/url/to/document/3', title: 'DOMAIN NAME 3' },
-    { id: 5, url: 'path/url/to/document/4', title: 'DOMAIN NAME 4' }]//state.mediaurls
+    mediaUrls: state.mediaurls
   }
 }
-export default compose(
-  withRouter,
-  connect(mapStateToProps, { fetchMediaUrls })
-)(App);
+// const mapDispatchToProps = dispatch => ({addUser: () => dispatch(addUser())})
+export default withRouter(connect(mapStateToProps, { fetchMediaUrls })(App));
