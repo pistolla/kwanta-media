@@ -41,22 +41,19 @@ const useStyles = makeStyles(theme => ({
 
 function SearchLink({ fetchMediaUrls, searching, onSearching }) {
     const classes = useStyles();
+    const [token, setToken] = useState("");
 
     const handleSearchQuery = () => {
         onSearching(true);
-        console.log(searching);
-        fetchMediaUrls(async () => {
-
-        });
+        fetchMediaUrls(token);
+        onSearching(false);
+        setToken("");
     };
 
-    const handleRefreshQuery = () => {
-        onSearching(true);
-
-        fetchMediaUrls(async () => {
-
-        });
-    };
+    const handleTextFieldChange = event => {
+        console.log(event.target.value);
+        setToken(event.target.value);
+    }
 
     return (
         <div align="center" className="root" data-test="SearchLinkComponent">
@@ -67,10 +64,12 @@ function SearchLink({ fetchMediaUrls, searching, onSearching }) {
                     type="search"
                     margin="normal"
                     variant="outlined"
+                    value={token}
+                    onChange={handleTextFieldChange}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton data-test="search" onClick={handleSearchQuery} className={classes.iconButton} {...(searching ? 'disabled' : '')}>
+                                <IconButton data-test="search" onClick={handleSearchQuery} className={classes.iconButton} disabled={searching}>
                                     <SearchIcon fontSize="large" />
                                 </IconButton>
                             </InputAdornment>

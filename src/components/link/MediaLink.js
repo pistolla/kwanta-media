@@ -26,33 +26,32 @@ const useStyles = makeStyles(theme => ({
 
 function MediaLink({ link, expanded, onExpanded, ...props }) {
     const classes = useStyles();
-    const [content] = useState(`${link.id}` + "bh-content")
-    const [header] = useState(`${link.id}` + "bh-header")
-    const handleChange = (event, isExpanded) => {
-        if(isExpanded)
-            onExpanded(event);
+    const [content] = useState("panel" + `${link.id}` + "bh-content")
+    const [header] = useState("panel" + `${link.id}` + "bh-header")
+    const handleChange = panel => (event, isExpanded) => {
+        onExpanded(isExpanded ? panel : false);
     }
 
     return (
-        <ExpansionPanel expanded={expanded === link.id} onClick={handleChange(link.id)} data-test="LinkComponent">
+        <ExpansionPanel expanded={expanded === link.id} onChange={handleChange(link.id)} data-test="LinkComponent">
             <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls={content}
                 id={header}
                 onChange={handleChange(link.id)}>
                 <Typography className={classes.heading}>{link.title}</Typography>
-                <Typography className={classes.secondaryHeading}>{link.url}</Typography>
+                <Typography className={classes.secondaryHeading}>{link.canonical_url}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
                 <Grid container className={classes.panel} spacing={2}>
                     <Grid item xs={12} md={6} className={classes.panelItem}>
                         <Grid container justify="center" spacing={0}>
-                            
+
                         </Grid>
                     </Grid>
                     <Grid item xs={12} md={6} className={classes.panelItem}>
                         <Grid container justify="center" spacing={0}>
-                            
+
                         </Grid>
                     </Grid>
                 </Grid>

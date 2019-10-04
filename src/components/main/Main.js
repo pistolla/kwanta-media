@@ -7,9 +7,8 @@ import MediaLinks from '../medialinks/MediaLinks';
 const classes = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    margin: 0
+    marginTop: '120px'
   },
-  
 }));
 
 
@@ -17,8 +16,8 @@ function Main(props, mediaUrls, wallet) {
   const [searching, setSearching] = useState(false);
   
   return (
-    <Grid className={classes.root} container spacing={3} data-test="MainComponent">
-      <Grid item xs={12} width="100%">
+    <Grid className={classes.root} container data-test="MainComponent">
+      <Grid item xs={12} width="100%" >
         <Searchlink {...props} searching={searching} onSearching={(isSearching) => setSearching(isSearching)} />
       </Grid>
       <Grid item xs={12} width="100%">
