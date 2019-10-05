@@ -24,10 +24,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function AddLink() {
+function AddLink({account, ...props}) {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const [form] = useState({ url: '', token: '', type: '', author: false, seed: 0, accept: false });
+    const [form] = useState({ url: '', token: account, type: '', author: false, seed: 0, accept: false });
 
     const handleClose = () => {
         setOpen(!open);

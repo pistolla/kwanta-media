@@ -42,12 +42,15 @@ const useStyles = makeStyles(theme => ({
 function SearchLink({ fetchMediaUrls, searching, onSearching }) {
     const classes = useStyles();
     const [token, setToken] = useState("");
+    const [showProgress, setShowProgress] = useState(false); 
 
     const handleSearchQuery = () => {
+        setShowProgress(true);
         onSearching(true);
-        fetchMediaUrls(token);
-        onSearching(false);
-        setToken("");
+        fetchMediaUrls(token).then(() => {
+            onSearching(false);
+            setShowProgress(false);
+        });
     };
 
     const handleTextFieldChange = event => {
@@ -78,9 +81,9 @@ function SearchLink({ fetchMediaUrls, searching, onSearching }) {
                 />
                 <div align="center" className="refresh">
                     <Fade
-                        in={searching}
+                        in={showProgress}
                         style={{
-                            transitionDelay: searching ? '800ms' : '0ms',
+                            transitionDelay: showProgress ? '800ms' : '0ms',
                         }}
                         unmountOnExit
                     >

@@ -46,7 +46,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.fetch = this.fetch.bind(this);
-    this.state = { value: 0, connected: false }
+    this.state = { value: 0, connected: false, account: '' }
     this.props.history.listen((location, action) => {
       
     })
@@ -71,6 +71,9 @@ class App extends Component {
 
   handleChange = (tab, value) => {
     this.setState({ value: value });
+  }
+  setUserAccount = (acc) => {
+    this.setState({account: acc})
   }
 
   render() {
@@ -98,7 +101,7 @@ class App extends Component {
                 <Tab label="Wallet" component={Link} to="/wallet" className={this.classes.navTab} />
                 <Tab label="Get Started" component={Link} to="/getstarted" className={this.classes.navTab} />
               </Tabs>
-              <MetaMask {...this.props} {...this.state} setWeb3={this.setWeb3} />
+              <MetaMask {...this.props} {...this.state} setWeb3={this.setWeb3} handleMetaMaskAccount={this.setUserAccount}/>
             </Toolbar>
           </AppBar>
           <Container maxWidth="lg">
@@ -107,10 +110,10 @@ class App extends Component {
                 <Main {...this.props} />
               </Route>
               <Route path="/watchlinks">
-                <Media {...this.props} connected={this.state.connected} />
+                <Media {...this.props} connected={this.state.connected} account={this.state.account} />
               </Route>
               <Route path="/wallet">
-                <Account {...this.props} connected={this.state.connected} />
+                <Account {...this.props} connected={this.state.connected} account={this.state.account} />
               </Route>
               <Route path="/getstarted">
                 <About {...this.props} />

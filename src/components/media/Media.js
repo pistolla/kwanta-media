@@ -18,10 +18,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Media({ connected, ...props }) {
+function Media({ connected, account, ...props }) {
     const welcomeMsg = "Hi, welcome to your watch list. You will be rewarded if a media does not have fake news."
     const classes = useStyles();
-
+    const connectMetamask = () => {
+        window.alert('Please ensure your browser has metamask extension');
+    }
     return (
         <Grid className={classes.root} container data-test="MediaComponent">
             <Grid item xs={12} width="100%">
@@ -29,8 +31,8 @@ function Media({ connected, ...props }) {
             </Grid>
             <Grid item xs={12} width="100%">
                 <Paper className={classes.buttonPanel} width="fullWidth">
-                    {connected === true ? <Button color="secondary" size="large">Connect to MaskMask </Button> :
-                    <AddLink {...props} connected={connected} />}
+                    {connected !== true ? <Button onClick={connectMetamask} color="secondary" size="large">Connect to MaskMask </Button> :
+                    <AddLink {...props} connected={connected} account={account}/>}
                 </Paper>
             </Grid>
             
