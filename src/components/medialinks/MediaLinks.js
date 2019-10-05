@@ -9,8 +9,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        flexGrow: 1,
-        margin: 0
+        margin: '0px !important'
     },
     emptyIcon: {
         width: '150px',
@@ -46,10 +45,11 @@ function MediaLinks({ mediaUrls, searching, ...props }) {
                     return <MediaLink {...props} link={value} key={index} expanded={expanded} onExpanded={handleExpanded} />
                 }) :
                     <div align="center" width="100%" className="emptyContainer">
-                        <IconButton className={classes.emptyIcon} disabled><HourglassEmpty fontSize="large" /></IconButton>
-                        <Typography align="center" paragraph={true} variant="h5" color="textSecondary">
-                            {emptyMesage}
-                        </Typography>
+                        <center>
+                            <Typography align="center" paragraph={true} variant="h5" color="textSecondary">
+                                {emptyMesage}
+                            </Typography>
+                        </center>
                     </div>
                 }
             </Grid>

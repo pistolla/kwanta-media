@@ -11,8 +11,9 @@ import Main from './components/main/Main';
 import About from './components/about/About';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { fetchMediaUrls } from './actions';
-
+import { fetchMediaUrls, getMyMediaUrls } from './actions';
+import Web3 from 'web3'
+const web3 = new Web3(Web3.givenProvider || "http://localhost:3001");
 class App extends Component {
   classes = makeStyles(theme => ({
     root: {
@@ -53,16 +54,19 @@ class App extends Component {
 
   fetch() {
     this.props.fetchMediaUrls();
+    this.props.getMyMediaUrls();
   }
 
   handleConnectMetamask = () => {
 
   }
 
-  setWeb3 = (web3) => {
+  setWeb3 = () => {
+   
     if(web3 !== undefined){
       this.setState({connected: true});
     }
+    return web3;
   }
 
   handleChange = (tab, value) => {
@@ -123,4 +127,4 @@ const mapStateToProps = state => {
   }
 }
 // const mapDispatchToProps = dispatch => ({addUser: () => dispatch(addUser())})
-export default withRouter(connect(mapStateToProps, { fetchMediaUrls })(App));
+export default withRouter(connect(mapStateToProps, { fetchMediaUrls, getMyMediaUrls })(App));

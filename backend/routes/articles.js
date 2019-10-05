@@ -60,5 +60,10 @@ router.route('/setamount/:id').post((req, res) => {
     })
     .catch(err => res.status(400).json('Error: ' + err));
 });
+router.route('/getmediaurls').get((req, res) => {
+  Article.find({wallet_address: req.params.token})
+    .then(articles => res.json(articles))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
 
 module.exports = router;

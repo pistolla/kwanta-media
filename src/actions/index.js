@@ -26,3 +26,23 @@ export const fetchMediaUrls = (query) => async (dispatch) => {
             console.log(error)
         })
 }
+
+export const getMyMediaUrls = (query) => async (dispatch) => {
+    await axios({
+        "method": "GET",
+        "url": "https://kwanta.openode.io/getmediaurls",
+         "params": {
+            "token": query
+        }
+    })
+        .then((res) => {
+            console.log(res);
+            dispatch({
+                type: types.GET_MY_MEDIA_URLS,
+                payload: res.data.articles !== null ? res.data.articles : []
+            })
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}

@@ -28,7 +28,11 @@ const theme = createMuiTheme({
         modal: 1300,
         snackbar: 1400,
         tooltip: 1500
-    }
+    },
+    palette: {
+        primary: { main: '#4CAF50' },
+        secondary: { main: '#AA00FF', contrastText: '#9E9E9E' }
+    },
 });
 ReactDOM.render(
     <Provider store={configureStore()}>
