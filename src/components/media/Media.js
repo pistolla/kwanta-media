@@ -18,11 +18,45 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Media({ connected, account, ...props }) {
-    const welcomeMsg = "Hi, welcome to your watch list. You will be rewarded if a media does not have fake news."
+function Media({ connected, postMediaUrl, web3, account, ...props }) {
+    const welcomeMsg = `Hi ${account}, welcome to your watch list. You will be rewarded if a media does not have fake news.`
     const classes = useStyles();
     const connectMetamask = () => {
         window.alert('Please ensure your browser has metamask extension');
+    }
+    //props.getMyMediaUrls();
+    const transact = (article) =>{
+        if(web3 !== undefined){
+            window.alert('pay me')
+            web3.eth.getBalance(account).then(function(result){
+                let bal = web3.utils.fromWei(result, 'ether');
+                if(bal > article.seed_amount){
+                    let txnObject = {
+                        "from": article.wallet_address,
+                        "to": '0x6957836b1319a15362e81406BF63CB74612E79B8',
+                        "value": web3.utils.toWei(article.seed_amount,'ether'),
+                        // "gas": 21000,         (optional)
+                        // "gasPrice": 4500000,  (optional)
+                        // "data": 'For testing' (optional)
+                        // "nonce": 10           (optional)
+                    }
+                
+                    web3.eth.sendTransaction(txnObject, function(error, result){
+                        if(error){
+                            window.alert('Transaction error '+error)
+                            console.log( "Transaction error" ,error);
+                        }
+                        else{
+                            let txn_hash = result; //Get transaction hash
+                            console.log( "Transaction error" ,txn_hash);
+                            postMediaUrl(article);
+                        }
+                    });
+                }
+            });
+        }
+        
+        
     }
     return (
         <Grid className={classes.root} container data-test="MediaComponent">
@@ -32,12 +66,12 @@ function Media({ connected, account, ...props }) {
             <Grid item xs={12} width="100%">
                 <Paper className={classes.buttonPanel} width="fullWidth">
                     {connected !== true ? <Button onClick={connectMetamask} color="secondary" size="large">Connect to MaskMask </Button> :
-                    <AddLink {...props} connected={connected} account={account}/>}
+                    <AddLink {...props} connected={connected} account={account} handleTransfer={transact}/>}
                 </Paper>
             </Grid>
             
             <Grid item xs={12} width="100%">
-                <MediaLinks {...props} searching={false} />
+                <MediaLinks {...props} searching={false} mine={true} />
             </Grid>
         </Grid>
     );

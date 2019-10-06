@@ -12,7 +12,7 @@ const classes = makeStyles(theme => ({
 }));
 
 
-function Main(props, mediaUrls, wallet) {
+function Main(props) {
   const [searching, setSearching] = useState(false);
   
   return (
@@ -21,7 +21,7 @@ function Main(props, mediaUrls, wallet) {
         <Searchlink {...props} searching={searching} onSearching={(isSearching) => setSearching(isSearching)} />
       </Grid>
       <Grid item xs={12} width="100%">
-      <MediaLinks {...props} searching={searching} />
+      <MediaLinks {...props} searching={searching} mine={false} />
       </Grid>
     </Grid>
   );

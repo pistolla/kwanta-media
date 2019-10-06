@@ -57,6 +57,28 @@ const MetaMaskLockDialog = (props) => (
     </Dialog>
 );
 
+const MetaMaskDeniedDialog = (props) => (
+    <Dialog
+        className="MetaMaskDialog"
+        open={props.metaMaskDeniedDialogOpen}
+        transition={Slide}>
+        <DialogTitle>{"Oops, your MetaMask is connection denied"}</DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                {"You should allow MetaMask to interact with this application."}
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={props.handleMetaMaskEnable} color="primary">
+                Enable
+      </Button>
+            <Button onClick={props.handleMetaMaskDeniedDialogClose} color="primary">
+                I understand, continue
+      </Button>
+        </DialogActions>
+    </Dialog>
+);
+
 export class MetaMask extends Component {
     constructor(props) {
         super(props);
@@ -64,6 +86,7 @@ export class MetaMask extends Component {
             message: '',
             metaMaskInstallDialogOpen: false,
             metaMaskLockDialogOpen: false,
+            metaMaskDeniedDialogOpen: false,
             disableDialog: false
         };
         this.handleMetaMaskInstallDialogClose = this.handleMetaMaskInstallDialogClose.bind(this);
@@ -78,9 +101,20 @@ export class MetaMask extends Component {
         }
     }
 
+    async enable() {
+        if (window.ethereum !== undefined) {
+            try {
+               await window.ethereum.enable();
+            } catch (err) {
+                this.setState({ metaMaskDeniedDialogOpen: true, message: messages.METAMASK_ACCOUNT })
+            }
+        }
+    }
+
     fetchAccounts() {
         //const { web3 } = window;
-        if (this.props.web3 !== null) {
+        if (this.props.web3 !== null && this.props.web3 !== undefined) {
+            this.enable();
             this.props.web3.eth.getAccounts((err, accounts) => {
                 if (err) {
                     this.setState({ message: messages.LOAD_MATAMASK_WALLET_ERROR });
@@ -101,8 +135,8 @@ export class MetaMask extends Component {
 
     fetchNetwork() {
         //const { web3 } = window;
-        if (this.props.web3 !== null) {
-            this.props.web3.version.getNetwork((err, netId) => {
+        if (this.props.web3 !== null && this.props.web3.version !== undefined) {
+            this.props.web3.eth.net.getId((err, netId) => {
                 if (err) {
                     this.props.handleMetaMaskNetwork(null);
                     this.setState({ metaMaskLockDialogOpen: true, message: messages.NETWORK_ERROR });
@@ -121,13 +155,31 @@ export class MetaMask extends Component {
         window.addEventListener('load', function () {
             let web3 = window.web3;
             if (typeof web3 !== 'undefined') {
-                window.web3 = new Web3(web3.currentProvider);
+                let ethProvider = null;
+                if (window.ethereum !== undefined) {
+                    ethProvider = window.ethereum;
+                } else {
+                    ethProvider = web3.currentProvider;
+                }
+                window.web3 = new Web3(ethProvider);
                 self.props.setWeb3(window.web3);
                 self.fetchAccounts();
                 self.fetchNetwork();
+                if(window.ethereum !== undefined) {
+                window.ethereum.autoRefreshOnNetworkChange = false;
+
+                window.ethereum.on('accountsChanged', function (accounts) {
+                    self.fetchAccounts()
+                  })
+                  window.ethereum.on('networkChanged', function (accounts) {
+                    self.fetchNetwork()
+                  })
+                } else {
+
                 self.Web3Interval = setInterval(() => self.fetchWeb3(), 1000);
                 self.AccountInterval = setInterval(() => self.fetchAccounts(), 1000);
                 self.NetworkInterval = setInterval(() => self.fetchNetwork(), 1000);
+                }
             } else {
                 self.setState({ metaMaskInstallDialogOpen: true, message: messages.METAMASK_NOT_INSTALL });
             }
@@ -148,6 +200,14 @@ export class MetaMask extends Component {
         this.setState({ metaMaskLockDialogOpen: false, disableDialog: true });
     }
 
+    handleMetaMaskDeniedDialogClose() {
+        this.setState({ metaMaskDeniedDialogOpen: false, disableDialog: true });
+    }
+
+    handleEnable() {
+        this.setState({ metaMaskDeniedDialogOpen: false, disableDialog: true });
+    }
+
     render() {
         const metaMaskInstall = this.state.disableDialog === false &&
             <MetaMaskInstallDialog
@@ -161,10 +221,18 @@ export class MetaMask extends Component {
                 handleMetaMaskLockDialogClose={this.handleMetaMaskLockDialogClose}
             />
 
+        const metaMaskDenied = this.state.disableDialog === false &&
+            <MetaMaskDeniedDialog
+                {...this.state}
+                handleMetaMaskDeniedDialogClose={this.handleMetaMaskDeniedDialogClose}
+                handleMetaMaskEnable={this.handleEnable}
+            />
+
         return (
             <div className="MetaMask" data-test="MetamaskComponent">
                 {metaMaskInstall}
                 {metaMaskLock}
+                {metaMaskDenied}
             </div>
         );
     }

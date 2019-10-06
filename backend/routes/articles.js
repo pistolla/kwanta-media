@@ -3,7 +3,7 @@ let Article = require('../models/articles.model');
 
 router.route('/').get((req, res) => {
   Article.find()
-    .then(exercises => res.json(exercises))
+    .then(article => res.json(article))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -17,7 +17,6 @@ router.route('/add').post((req, res) => {
   const site_type = req.body.site_type;
   const wallet_address = req.body.wallet_address;
   const seed_amount = req.body.seed_amount;
-  const date_published = req.body.date_published;
 
   const newArticle = new Article({
    	title,
@@ -28,11 +27,10 @@ router.route('/add').post((req, res) => {
   	score,
   	site_type,
   	wallet_address,
-  	seed_amount,
- 	date_published
+  	seed_amount
   });
 
-  newExercise.save()
+  newArticle.save()
   .then(() => res.json('Article added!'))
   .catch(err => res.status(400).json('Error: ' + err));
 });

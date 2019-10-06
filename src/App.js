@@ -11,9 +11,9 @@ import Main from './components/main/Main';
 import About from './components/about/About';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { fetchMediaUrls, getMyMediaUrls } from './actions';
+import { fetchMediaUrls, getMyMediaUrls, postMediaUrl } from './actions';
 import Web3 from 'web3'
-const web3 = new Web3(Web3.givenProvider || "http://localhost:3001");
+// const web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 class App extends Component {
   classes = makeStyles(theme => ({
     root: {
@@ -46,7 +46,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.fetch = this.fetch.bind(this);
-    this.state = { value: 0, connected: false, account: '' }
+    this.state = { value: 0, connected: false, account: '', web3: null, metamask: { network: null} }
     this.props.history.listen((location, action) => {
       
     })
@@ -54,19 +54,16 @@ class App extends Component {
 
   fetch() {
     this.props.fetchMediaUrls();
-    this.props.getMyMediaUrls();
   }
 
   handleConnectMetamask = () => {
 
   }
 
-  setWeb3 = () => {
-   
+  setWeb3 = (web3) => {
     if(web3 !== undefined){
-      this.setState({connected: true});
+      this.setState({connected: true, web3: web3});
     }
-    return web3;
   }
 
   handleChange = (tab, value) => {
@@ -74,6 +71,9 @@ class App extends Component {
   }
   setUserAccount = (acc) => {
     this.setState({account: acc})
+  }
+  setMetaMaskNetwork = (id) => {
+    this.setState({metamask: {network: id}})
   }
 
   render() {
@@ -101,7 +101,13 @@ class App extends Component {
                 <Tab label="Wallet" component={Link} to="/wallet" className={this.classes.navTab} />
                 <Tab label="Get Started" component={Link} to="/getstarted" className={this.classes.navTab} />
               </Tabs>
-              <MetaMask {...this.props} {...this.state} setWeb3={this.setWeb3} handleMetaMaskAccount={this.setUserAccount}/>
+              <MetaMask 
+              {...this.props} 
+              web3={this.state.web3} 
+              metaMask={this.state.metamask}
+              setWeb3={this.setWeb3} 
+              handleMetaMaskAccount={this.setUserAccount}
+              handleMetaMaskNetwork={this.setMetaMaskNetwork}/>
             </Toolbar>
           </AppBar>
           <Container maxWidth="lg">
@@ -110,7 +116,7 @@ class App extends Component {
                 <Main {...this.props} />
               </Route>
               <Route path="/watchlinks">
-                <Media {...this.props} connected={this.state.connected} account={this.state.account} />
+                <Media {...this.props} connected={this.state.connected} account={this.state.account} web3={this.state.web3} />
               </Route>
               <Route path="/wallet">
                 <Account {...this.props} connected={this.state.connected} account={this.state.account} />
@@ -126,8 +132,9 @@ class App extends Component {
 }
 const mapStateToProps = state => {
   return {
-    mediaUrls: state.mediaurls
+    mediaUrls: state.mediaurls.all,
+    myMediaUrls: state.mediaurls.watchlist
   }
 }
 // const mapDispatchToProps = dispatch => ({addUser: () => dispatch(addUser())})
-export default withRouter(connect(mapStateToProps, { fetchMediaUrls, getMyMediaUrls })(App));
+export default withRouter(connect(mapStateToProps, { fetchMediaUrls, getMyMediaUrls, postMediaUrl })(App));

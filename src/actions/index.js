@@ -46,3 +46,19 @@ export const getMyMediaUrls = (query) => async (dispatch) => {
             console.log(error)
         })
 }
+
+export const postMediaUrl = (obj) => async (dispatch) => {
+    window.alert(JSON.stringify(obj, 0, 2));
+    await axios({
+        "method": "POST",
+        "url": "https://kwanta.openode.io/add",
+         "params": {...obj}
+    })
+        .then((res) => {
+            console.log(res);
+            getMyMediaUrls(obj.wallet_address);
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
