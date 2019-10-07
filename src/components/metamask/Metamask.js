@@ -161,25 +161,29 @@ export class MetaMask extends Component {
                 } else {
                     ethProvider = web3.currentProvider;
                 }
+                // ethProvider = new Web3.providers.HttpProvider(
+                //     'https://ropsten.infura.io/v3/8fe0b42e367847c388b0344c2fc60034'
+                // )
                 window.web3 = new Web3(ethProvider);
                 self.props.setWeb3(window.web3);
                 self.fetchAccounts();
                 self.fetchNetwork();
-                if(window.ethereum !== undefined) {
-                window.ethereum.autoRefreshOnNetworkChange = false;
-
-                window.ethereum.on('accountsChanged', function (accounts) {
-                    self.fetchAccounts()
-                  })
-                  window.ethereum.on('networkChanged', function (accounts) {
-                    self.fetchNetwork()
-                  })
-                } else {
-
                 self.Web3Interval = setInterval(() => self.fetchWeb3(), 1000);
                 self.AccountInterval = setInterval(() => self.fetchAccounts(), 1000);
                 self.NetworkInterval = setInterval(() => self.fetchNetwork(), 1000);
-                }
+                // if(window.ethereum !== undefined) {
+                // window.ethereum.autoRefreshOnNetworkChange = false;
+
+                // window.ethereum.on('accountsChanged', function (accounts) {
+                //     self.fetchAccounts()
+                //   })
+                //   window.ethereum.on('networkChanged', function (accounts) {
+                //     self.fetchNetwork()
+                //   })
+                // } else {
+
+                
+                // }
             } else {
                 self.setState({ metaMaskInstallDialogOpen: true, message: messages.METAMASK_NOT_INSTALL });
             }

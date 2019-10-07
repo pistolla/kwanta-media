@@ -19,10 +19,48 @@ const useStyles = makeStyles(theme => ({
         marginTop: '10px'
     }
 }))
-function Account({ transactions = [], account, connected, ...props }) {
+function Account({ transactions = [], account, connected,web3, ...props }) {
     const classes = useStyles();
     const welcomeMsg = "Welcome to your personal Kwanta Wallet.";
-    const heading = `Transfer Ethers to ${account}`
+    const heading = `Transfer Ethers to ${account}`;
+    const [gas, setGas] = useState(0)
+    const [charge] = useState(0.002)
+    const [bal] = useState(0)
+    const [submitting, setSubmitting] = useState(false);
+    const [pristine, setPristine] = useState(false);
+    const [form, setForm] = useState({ gas_price: gas, network_charge: charge, minimum_bal: bal, max_withdraw: 0, withdraw: 0 });
+    const validate = values => {
+        const errors = {};
+        if (!values.gas_price) {
+            errors.gas_price = 'Required';
+        }
+        if (!values.network_charge) {
+            errors.network_charge = 'Required';
+        }
+        if (!values.minimum_bal) {
+            errors.minimum_bal = 'Required';
+        }
+        if (!values.withdraw) {
+            errors.withdraw = 'Required';
+        }
+
+        return errors;
+    };
+    const calcMaxWithdraw = () => {
+        if(bal === 0){
+            return 0;
+        }
+        return (bal-charge)-gas;
+    }
+
+    const reset = () => {
+        setForm({ gas_price: gas, network_charge: charge, minimum_bal: bal, max_withdraw: calcMaxWithdraw, withdraw: 0 })
+        return true;
+    }
+    if(web3 !== null){
+        web3.eth.getGasPrice().then(value => setGas(value));
+    }
+    
     const handleClick = () => {
         console.log("clicked")
     }
@@ -40,9 +78,10 @@ function Account({ transactions = [], account, connected, ...props }) {
                 <Fragment>
                     <Grid item xs={9} width="100%" >
                         <Form
-                            
                             onSubmit={handleSubmit}
-                            render={() => (
+                            initialValues={form}
+                            validate={validate}
+                            render={({ handleSubmit, reset, submitting, pristine, form }) => (
                                 <form onSubmit={handleSubmit} noValidate>
                                     <Paper className={classes.form} >
                                         <Toolbar color="primary">
@@ -53,43 +92,50 @@ function Account({ transactions = [], account, connected, ...props }) {
                                                 <Field
                                                     fullWidth
                                                     required
-                                                    name="url"
+                                                    name="minimum_bal"
                                                     component={TextField}
                                                     type="text"
-                                                    label="Account Balance" />
+                                                    label="Account Balance"
+                                                    disabled
+                                                    value={bal} />
                                             </Grid>
                                             <Grid item xs={12} className={classes.gridContainer}>
                                                 <Field
                                                     fullWidth
                                                     required
-                                                    name="url"
+                                                    name="max_withdraw"
                                                     component={TextField}
                                                     type="text"
-                                                    label="Amount to Withdraw" />
+                                                    label="Max Amount Withdraw"
+                                                    disabled />
                                             </Grid>
                                             <Grid item xs={12} className={classes.gridContainer}>
                                                 <Field
                                                     fullWidth
                                                     required
-                                                    name="url"
+                                                    name="network_charge"
                                                     component={TextField}
                                                     type="text"
-                                                    label="Network Charges" />
+                                                    label="Network Charges"
+                                                    disabled
+                                                    value={charge} />
                                             </Grid>
                                             <Grid item xs={12} className={classes.gridContainer}>
                                                 <Field
                                                     fullWidth
                                                     required
-                                                    name="url"
+                                                    name="gas_price"
                                                     component={TextField}
                                                     type="text"
-                                                    label="Gas" />
+                                                    label="Gas"
+                                                    disabled
+                                                    value={gas} />
                                             </Grid>
                                             <Grid item xs={12} className={classes.gridContainer}>
                                                 <Field
                                                     fullWidth
                                                     required
-                                                    name="url"
+                                                    name="withdraw"
                                                     component={TextField}
                                                     type="text"
                                                     label="Total Withdrawable" />

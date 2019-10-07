@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Container, Typography, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Container, Typography, Tabs, Tab, Paper } from '@material-ui/core';
 import DeveloperModeIcon from '@material-ui/icons/DeveloperMode';
 import { MetaMask } from './components/metamask/Metamask';
 import Account from './components/account/Account';
@@ -12,8 +12,7 @@ import About from './components/about/About';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { fetchMediaUrls, getMyMediaUrls, postMediaUrl } from './actions';
-import Web3 from 'web3'
-// const web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
+
 class App extends Component {
   classes = makeStyles(theme => ({
     root: {
@@ -40,6 +39,16 @@ class App extends Component {
     },
     appbar: {
       zIndex: theme.zIndex.drawer + 1
+    },
+    main: {
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      height: '100vh'
+    },
+    footerContainer: {
+      maxHeight: '100px',
+      backgroundImage: `url("${"assets/gutterfree.png"}")`
     }
   }));
 
@@ -110,7 +119,7 @@ class App extends Component {
               handleMetaMaskNetwork={this.setMetaMaskNetwork}/>
             </Toolbar>
           </AppBar>
-          <Container maxWidth="lg">
+          <Container className={this.classes.main} maxWidth="lg" >
             <Switch>
               <Route exact path="/">
                 <Main {...this.props} />
@@ -119,13 +128,18 @@ class App extends Component {
                 <Media {...this.props} connected={this.state.connected} account={this.state.account} web3={this.state.web3} />
               </Route>
               <Route path="/wallet">
-                <Account {...this.props} connected={this.state.connected} account={this.state.account} />
+                <Account {...this.props} connected={this.state.connected} account={this.state.account} web3={this.state.web3} />
               </Route>
               <Route path="/getstarted">
                 <About {...this.props} />
               </Route>
             </Switch>
           </Container>
+          <footer className={this.classes.footerContainer}>
+            
+              <Typography paragraph align="center" width="fullWidth">{`Made with love by Dataphile for DEVCON2019 Gitcoin Hackathon. Copyright 2019.`}</Typography>
+            
+          </footer>
         </div>
     )
   };
